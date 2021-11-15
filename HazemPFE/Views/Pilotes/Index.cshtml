@@ -1,0 +1,70 @@
+﻿@model IEnumerable<HazemPFE.Models.Pilote>
+@{
+    ViewBag.Title = "Pilotes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Pilotes</h2>
+<p>
+    @Html.ActionLink("New Pilote", "New", "Pilotes", null, new { @class = "btn btn-primary" })
+</p>
+<table id="pilotes" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th> Prenom</th>
+            <th> Indicatif Radio</th> 
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+          var table =  $("#pilotes").DataTable({
+                ajax: {
+                    url: "/api/pilotes",
+                    dataSrc:""
+                },
+                columns: [
+                    {
+                        data: "nom",
+                        render: function (data, type, pilote) {
+                            return "<a href='/pilotes/edit/" + pilote.id + "'>" + pilote.nom + "</a>";
+                        }
+                    },
+                    {
+                        data:"prenom"
+                    },
+                    {
+                        data:"indicatif_Radio"
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link js-delete' data-pilote-id=" + data + ">Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+            $("#pilotes").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Pilote?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/pilotes/" + button.attr("data-pilote-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

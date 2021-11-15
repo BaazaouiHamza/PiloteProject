@@ -1,0 +1,29 @@
+﻿@model HazemPFE.ViewModels.PiloteFormViewModel
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<h2>@Model.Title</h2>
+@using (Html.BeginForm("Save", "Pilotes"))
+{
+    @Html.ValidationSummary(true, "Please fix the following errors.")
+<div class="form-group">
+    @Html.LabelFor(m => m.Nom)
+    @Html.TextBoxFor(m => m.Nom, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Nom)
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Prenom)
+    @Html.TextBoxFor(m => m.Prenom, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Prenom)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Indicatif_Radio)
+    @Html.TextBoxFor(m => m.Indicatif_Radio, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Indicatif_Radio)
+</div>
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Save</button>
+}
